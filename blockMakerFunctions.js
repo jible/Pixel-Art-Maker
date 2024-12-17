@@ -29,49 +29,53 @@ const blockMakerFunctions = {
       setBlockColor(r,g,b, canvas, data, x, y, blockSize)
   },
   mode(canvas, data, x, y, blockSize) {
-    let colorCounts = new Map();
-    let mostCommon = { count: 0, token: null };
-    let newColor = { r: 0, g: 0, b: 0 };
-  
-    // Iterate over the block to find the most common color
+    // Use a single object to count RGB values efficiently
+    const colorCounts = {};
+    let mostCommon = { count: 0, r: 0, g: 0, b: 0 };
+
+    // Iterate over the block to count colors
     itterateBlock(canvas, data, x, y, blockSize, (px) => {
-      let r = data[px * 4];      // Red
-      let g = data[px * 4 + 1];  // Green
-      let b = data[px * 4 + 2];  // Blue
-  
-      const token = tokenColor(r, g, b);
-      const count = (colorCounts.get(token) || 0) + 1;
-      colorCounts.set(token, count);
-  
-      // Update most common color dynamically
-      if (count > mostCommon.count) {
-        mostCommon = { count, token };
-      }
+        const r = data[px * 4];      // Red
+        const g = data[px * 4 + 1];  // Green
+        const b = data[px * 4 + 2];  // Blue
+
+        // Create a unique index for each RGB combination
+        const token = (r << 16) | (g << 8) | b; // Pack RGB into a single integer
+
+        // Update frequency map
+        colorCounts[token] = (colorCounts[token] || 0) + 1;
+
+        // Track the most common color dynamically
+        if (colorCounts[token] > mostCommon.count) {
+            mostCommon = { count: colorCounts[token], r, g, b };
+        }
     });
-  
-    // Decode the most common color
-    newColor = undoTokenColor(mostCommon.token);
-  
-    setBlockColor(newColor.r,newColor.g,newColor.b, canvas, data, x, y, blockSize)
-  },
+
+    // Set the block color to the most common one
+    setBlockColor(mostCommon.r, mostCommon.g, mostCommon.b, canvas, data, x, y, blockSize);
+}
+,
   median(canvas, data, x, y, blockSize) {
-    let colorCounts = new Map();
-    let rs = []
-    let gs = []
-    let bs = []
-    // Iterate over the block to find the most common color
+    let rs = [];
+    let gs = [];
+    let bs = [];
+
+    // Collect RGB values from the block
     itterateBlock(canvas, data, x, y, blockSize, (px) => {
-      rs.push( data[px * 4] );      // Red
-      gs.push( data[px * 4 + 1] );   // Green
-      bs.push( data[px * 4 + 2] );  // Blue
+        rs.push(data[px * 4]);      // Red
+        gs.push(data[px * 4 + 1]);  // Green
+        bs.push(data[px * 4 + 2]);  // Blue
     });
-    const r = getMedian(rs)
-    const g = getMedian(gs)
-    const b = getMedian(bs)
 
+    // Compute the median for each color
+    const r = quickMedian(rs);
+    const g = quickMedian(gs);
+    const b = quickMedian(bs);
 
-    setBlockColor(r,g,b, canvas, data, x, y, blockSize)
-  }
+    // Set the block color
+    setBlockColor(r, g, b, canvas, data, x, y, blockSize);
+}
+
 }
 
 
@@ -92,25 +96,51 @@ function setBlockColor(r,g,b, canvas, data, x, y, blockSize){
 
 
 
-function getMedian(array) {
+function quickMedian(array) {
   if (!array || array.length === 0) {
       throw new Error("Array must not be empty");
   }
 
-  // Step 1: Sort the array in ascending order
-  const sortedArray = array.slice().sort((a, b) => a - b);
+  const mid = Math.floor(array.length / 2);
 
-  const mid = Math.floor(sortedArray.length / 2);
-
-  // Step 2: Check if the array has an odd or even length
-  if (sortedArray.length % 2 === 0) {
-      // If even, return the average of the two middle numbers
-      return (sortedArray[mid - 1] + sortedArray[mid]) / 2;
-  } else {
-      // If odd, return the middle number
-      return sortedArray[mid];
-  }
+  // Use Quickselect to find the k-th smallest element
+  return quickSelect(array, mid);
 }
+
+function quickSelect(array, k) {
+  let left = 0;
+  let right = array.length - 1;
+
+  while (left < right) {
+      const pivotIndex = partition(array, left, right);
+
+      if (pivotIndex === k) {
+          return array[pivotIndex];
+      } else if (pivotIndex < k) {
+          left = pivotIndex + 1;
+      } else {
+          right = pivotIndex - 1;
+      }
+  }
+
+  return array[left];
+}
+
+function partition(array, left, right) {
+  const pivot = array[right];
+  let i = left;
+
+  for (let j = left; j < right; j++) {
+      if (array[j] < pivot) {
+          [array[i], array[j]] = [array[j], array[i]];
+          i++;
+      }
+  }
+
+  [array[i], array[right]] = [array[right], array[i]];
+  return i;
+}
+
 
 function tokenColor(r, g, b) {
     return `${r},${g},${b}`;

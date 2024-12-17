@@ -8,15 +8,20 @@ const ctx = canvas.getContext('2d');
 let makeBlock = blockMakerFunctions.mean;
 let img = new Image();
 let originalWidth, originalHeight;
+const palletteManager = {
+  current: 0,
+  collection:[
+    [],
+    [],
+    [],
+  ] 
+}
 
 const drawingManager = {
   blockSize : blockSizeInput.value,
   drawing : false,
   current: false
 }
-
-
-
 
 
 function loadImgFile(file){
@@ -52,9 +57,13 @@ uploadInput.addEventListener('change', (newImg) => {
   }
 });
 
-// Handle block size change
+// Update slider value display
 blockSizeInput.addEventListener('input', (slider) => {
   blockSizeValue.textContent = slider.target.value;
+});
+
+// Apply pixelation only when slider interaction ends
+blockSizeInput.addEventListener('change', (slider) => {
   if (img.src) {
     pixelateImage(parseInt(slider.target.value));
   }
@@ -81,29 +90,12 @@ function pixelateImage(blockSize) {
 
   // Loop through each row and delay the processing of blocks
   for (let y = 0; y < canvas.height; y += blockSize) {
-    delayedRowConstruct(0, canvas.width, blockSize, (x) => {
+    for (let x = 0; x < canvas.width; x += blockSize) {
       makeBlock(canvas, data, x, y, blockSize);
-    });
+    };
   }
 
   // Put the modified image data back to the canvas
   ctx.putImageData(imageData, 0, 0);
 }
 
-// This function will construct each row with a delay
-function delayedRowConstruct(startVal, max, increment, action) {
-  let i = startVal;
-  iterate(); // Start the iteration
-  function iterate() {
-    if (i >= max) {
-      return; // Stop if we've reached or exceeded the max value
-    }
-
-    // Perform the action for the current 'i'
-    action(i);
-
-    // Increment and schedule the next iteration
-    i += increment;
-    requestAnimationFrame(iterate); // Delay until the next frame
-  }
-}
