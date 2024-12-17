@@ -1,10 +1,4 @@
-
-// MANAGER
-
 export const blockManager = {
-
-
-    
     blockMakerFunctions : {
         mean(canvas, data, x, y, blockSize) {
             let r = 0, g = 0, b = 0, count = 0;

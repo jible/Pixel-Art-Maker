@@ -1,9 +1,9 @@
 // IMPORTS
-import {defaultPallettes} from ''
+import { defaultPallettes } from "../palette/defaultPalettes";
 
 
 // MANAGER
-const paletteManager = {
+export const paletteManager = {
     usePalette: false,
     current: 0,
     collection: defaultPallettes,

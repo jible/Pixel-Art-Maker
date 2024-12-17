@@ -1,7 +1,7 @@
 // IMPORTS
-import {blockManager} from ''
-import {paletteManager} from ''
-import {imageManager} from ''
+import { blockManager } from "./blockManager.js";
+import { paletteManager } from "./palletteManager.js";
+import { imageManager } from "./imageManager.js";
 
 // MANAGER
 

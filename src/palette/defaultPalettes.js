@@ -1,4 +1,4 @@
-const defaultPallettes = [
+export const defaultPallettes = [
     {
         name: "Retro",
         colors: [
