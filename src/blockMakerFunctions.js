@@ -87,10 +87,15 @@ const blockMakerFunctions = {
 
 
 function setBlockColor(r,g,b, canvas, data, x, y, blockSize){
+    let color  = [r,g,b]
+    if (paletteManager.usePalette) {
+        color = getClosestColor(color)
+    }
+
     itterateBlock(canvas, data, x, y, blockSize, (px) => {
-        data[px * 4] = r;      // Set red
-        data[px * 4 + 1] = g;  // Set green
-        data[px * 4 + 2] = b;  // Set blue
+        data[px * 4] = color[0];      // Set red
+        data[px * 4 + 1] = color[1];  // Set green
+        data[px * 4 + 2] = color[2];  // Set blue
       });
 }
 

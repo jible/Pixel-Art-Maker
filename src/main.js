@@ -8,14 +8,8 @@ const ctx = canvas.getContext('2d');
 let makeBlock = blockMakerFunctions.mean;
 let img = new Image();
 let originalWidth, originalHeight;
-const palletteManager = {
-  current: 0,
-  collection:[
-    [],
-    [],
-    [],
-  ] 
-}
+
+
 
 const drawingManager = {
   blockSize : blockSizeInput.value,
