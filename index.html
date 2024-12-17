@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixelation Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: #f5f5f5;
+    }
+    canvas {
+      border: 1px solid black;
+      margin-top: 20px;
+      max-width: 100%; /* Ensure canvas doesn't overflow horizontally */
+      max-height: 80vh; /* Limit height to 80% of viewport height */
+    }
+    #upload {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pixelation Tool</h1>
+
+  <!-- Image upload input -->
+  <input type="file" id="upload" accept="image/*">
+  <br>
+
+  <!-- Slider to control block size -->
+  <label for="blockSize">Block Size:</label>
+  <input type="range" id="blockSize" min="5" max="50" value="10">
+  <span id="blockSizeValue">10</span>
+
+  <br><br>
+  <label for="blockCalc">Block Color Calculation Method:</label>
+    <select id="blockCalc" name="Block Calc">
+    <option value="mean">mean</option>
+    <option value="median">median</option>
+    <option value="mode">mode</option>
+    <option value="luminosity ">luminosity</option>
+    <option value="min ">minimum</option>
+    <option value="max ">maximum</option>
+    </select>
+
+    <br><br>
+  <!-- Canvas for image rendering -->
+  <canvas id="canvas"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
