@@ -17,7 +17,6 @@
     
       <h2>Upload Image</h2>
       <div class="input-group">
-        <label class="control-label" for="upload">Upload Image</label>
         <input type="file" id="upload" accept="image/*">
       </div>
     
@@ -26,22 +25,34 @@
         <label class="control-label" for="blockSize">Block Size</label>
         <input type="range" id="blockSize" min="5" max="50" value="10">
         <span id="blockSizeValue">10</span>
-      </div>
-    
-      <h2>Color Calculation</h2>
-      <div class="input-group">
+
         <label class="control-label" for="blockCalc">Calculation Method</label>
         <select id="blockCalc">
           <option value="mean">Mean</option>
           <option value="median">Median</option>
           <option value="mode">Mode</option>
-          <option value="luminosity">Luminosity</option>
-          <option value="min">Minimum</option>
-          <option value="max">Maximum</option>
         </select>
       </div>
+
+      <!-- Palette Settings -->
+      <h2>Palette Settings</h2>
+      <div class="input-group">
+        <button id="usePalette">Use Palette</button>
+        <label for="paletteSelect">Select Palette</label>
+        <select id="paletteSelect">
+        </select>
+
+        <label for="colorPicker">Make a Palette</label>
+        <div id="paletteMaker">
+          <div id="colorHolder">
+            <input type="color">
+          </div>
+          <button id="addColorButton">+</button>
+          <button id="removeColorButton">-</button>
+        </div>
+        <button id="addPaletteButton">Add Palette</button>
+      </div>
     </div>
-    
 
     <!-- Main area for canvas -->
     <div class="main-content">
