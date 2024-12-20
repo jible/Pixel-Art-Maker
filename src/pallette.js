@@ -56,25 +56,7 @@ export const paletteManager = {
 //----------------------------------------------------------------------
 
 
-// Function to find the closest color in the current palette
-export function getClosestColor(color) {
-    const palette = paletteManager.collection[paletteManager.current].colors;
-    let closestColor = palette[0];
-    let minDistance = Infinity;
 
-    palette.forEach(paletteColor => {
-        const distance = Math.sqrt(Math.pow(paletteColor[0] - color[0], 2) + 
-                                   Math.pow(paletteColor[1] - color[1], 2) + 
-                                   Math.pow(paletteColor[2] - color[2], 2));
-        
-        if (distance < minDistance) {
-            closestColor = paletteColor;
-            minDistance = distance;
-        }
-    });
-
-    return closestColor;
-}
 // --------------------------------------
 export function updatePalletteDropDown(){
     palleteDropDown.innerHTML = ''

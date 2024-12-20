@@ -2,7 +2,7 @@
 // IMPORT 
 // -------------------------------
 import { paletteManager, addPallette, updatePalletteDropDown } from "./pallette.js";
-import { blockMakerFunctions } from "./blockMakerFunctions.js";
+import { blockManager } from "./blockManager.js";
 
 //------------------------------------------------------------------
 // CONSTANT DECLARATIONS
@@ -19,7 +19,7 @@ const canvas = document.getElementById('canvas');
 const addPaletteButton = document.getElementById('addPaletteButton')
 const ctx = canvas.getContext('2d');
 const usePalette =  document.getElementById('usePalette')
-let makeBlock = blockMakerFunctions.mean;
+let makeBlock = blockManager.blockMakerFunctions.mean;
 let img = new Image();
 let originalWidth, originalHeight;
 const palleteDropDown = document.getElementById("paletteSelect");
@@ -109,7 +109,7 @@ blockSizeInput.addEventListener('change', (slider) => {
 
 // Handle calc method change
 blockCalcDropDown.addEventListener('input', () => {
-  makeBlock = blockMakerFunctions[blockCalcDropDown.value];
+  makeBlock = blockManager.blockMakerFunctions[blockCalcDropDown.value];
   pixelateImage(parseInt(blockSizeValue.textContent));
 });
 
