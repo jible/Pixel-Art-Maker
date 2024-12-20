@@ -1,3 +1,9 @@
+// ------------------------------
+// IMPORT 
+// -------------------------------
+import { paletteManager, addPallette, updatePalletteDropDown } from "./pallette.js";
+import { blockMakerFunctions } from "./blockMakerFunctions.js";
+
 //------------------------------------------------------------------
 // CONSTANT DECLARATIONS
 //----------------------------------------------------------------------
@@ -16,6 +22,7 @@ const usePalette =  document.getElementById('usePalette')
 let makeBlock = blockMakerFunctions.mean;
 let img = new Image();
 let originalWidth, originalHeight;
+const palleteDropDown = document.getElementById("paletteSelect");
 
 const drawingManager = {
   blockSize: blockSizeInput.value,
@@ -53,11 +60,6 @@ function hexToRgb(hex) {
 
   // Return the RGB values as an array
   return [r, g, b];
-}
-
-function resetColorselection(){
-  colorHolder.removeChild
-  colorHolder.appendChild(makeColorPicker())
 }
 
 removeColor.addEventListener("click", ()=>{

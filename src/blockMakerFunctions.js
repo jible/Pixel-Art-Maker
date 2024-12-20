@@ -1,3 +1,6 @@
+// IMPORTS
+import { paletteManager, getClosestColor } from "./pallette.js";
+
 //------------------------------------------------------------------
 // ITERATE BLOCK FUNCTION
 //----------------------------------------------------------------------
@@ -18,7 +21,7 @@ function itterateBlock(canvas, data, x, y, blockSize, callback){
 // BLOCK MAKER FUNCTIONS
 //----------------------------------------------------------------------
 
-const blockMakerFunctions = {
+export const blockMakerFunctions = {
   mean(canvas, data, x, y, blockSize) {
       let r = 0, g = 0, b = 0, count = 0;
       itterateBlock(canvas, data, x, y, blockSize, (px) => {

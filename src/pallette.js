@@ -3,7 +3,7 @@
 //----------------------------------------------------------------------
 const palleteDropDown = document.getElementById("paletteSelect");
 
-const defaultPallettes = [
+export const defaultPallettes = [
     {
         name: "Retro",
         colors: [
@@ -41,7 +41,7 @@ const defaultPallettes = [
 // PALETTE MANAGER
 //----------------------------------------------------------------------
 
-const paletteManager = {
+export const paletteManager = {
     usePalette: false,
     current: 0,
     collection: defaultPallettes
@@ -57,7 +57,7 @@ const paletteManager = {
 
 
 // Function to find the closest color in the current palette
-function getClosestColor(color) {
+export function getClosestColor(color) {
     const palette = paletteManager.collection[paletteManager.current].colors;
     let closestColor = palette[0];
     let minDistance = Infinity;
@@ -76,7 +76,7 @@ function getClosestColor(color) {
     return closestColor;
 }
 // --------------------------------------
-function updatePalletteDropDown(){
+export function updatePalletteDropDown(){
     palleteDropDown.innerHTML = ''
     for (let i = 0; i < paletteManager.collection.length; i++){
         let optionElement = document.createElement('option');
@@ -86,7 +86,7 @@ function updatePalletteDropDown(){
     }
 }
 
-function addPallette(name,colors){
+export function addPallette(name,colors){
     
     paletteManager.collection.push({
         name: name,
