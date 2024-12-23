@@ -1,7 +1,7 @@
 //------------------------------------------------------------------
 // CONSTS
 //----------------------------------------------------------------------
-const palleteDropDown = document.getElementById("paletteSelect");
+const paleteDropDown = document.getElementById("paletteSelect");
 
 export const defaultPallettes = [
     {
@@ -139,14 +139,15 @@ export const paletteManager = {
 
 // --------------------------------------
 export function updatePalletteDropDown(){
-    palleteDropDown.innerHTML = ''
+    paleteDropDown.innerHTML = ''
     for (let i = 0; i < paletteManager.collection.length; i++){
         let optionElement = document.createElement('option');
         optionElement.value = i;  // Set the value to "0"
         optionElement.textContent = paletteManager.collection[i].name;  // The text displayed for the option
-        palleteDropDown.appendChild(optionElement)
+        paleteDropDown.appendChild(optionElement)
     }
 }
+
 
 export function addPallette(name,colors){
     
@@ -154,7 +155,11 @@ export function addPallette(name,colors){
         name: name,
         colors: colors
     })
-    updatePalletteDropDown()
+    let optionElement = document.createElement('option');
+    optionElement.value = paletteManager.collection.length -1 ;  // Set the value to "0"
+    console.log(paletteManager.collection[paletteManager.length-1])
+    optionElement.textContent = paletteManager.collection[paletteManager.collection.length-1].name;  // The text displayed for the option
+    paleteDropDown.appendChild(optionElement)
 } 
 
 
