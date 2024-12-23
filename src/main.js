@@ -8,10 +8,10 @@ import { blockManager } from "./blockManager.js";
 // CONSTANT DECLARATIONS
 //----------------------------------------------------------------------
 // Get HTML elements
-const uploadInput = document.getElementById('upload');
-const blockSizeInput = document.getElementById('blockSize');
-const blockSizeValue = document.getElementById('blockSizeValue');
-const blockCalcDropDown = document.getElementById('blockCalc');
+const fileUploadInput = document.getElementById('upload');
+const blockSizeInputField = document.getElementById('blockSize');
+const blockSizeDisplay = document.getElementById('blockSizeValue');
+const blockCalculationMethodDropdown = document.getElementById('blockCalc');
 const colorHolder = document.getElementById('colorHolder')
 const addColor = document.getElementById('addColorButton')
 const removeColor = document.getElementById('removeColorButton')
@@ -19,35 +19,114 @@ const canvas = document.getElementById('canvas');
 const addPaletteButton = document.getElementById('addPaletteButton')
 const ctx = canvas.getContext('2d');
 const usePalette =  document.getElementById('usePalette')
-let makeBlock = blockManager.blockMakerFunctions.mean;
+let makeBlock = blockManager.makerMethods.mean;
 let img = new Image();
 let originalWidth, originalHeight;
 const palleteDropDown = document.getElementById("paletteSelect");
 
 const drawingManager = {
-  blockSize: blockSizeInput.value,
+  blockSize: blockSizeInputField.value,
   drawing: false,
   current: false
 }
 
-//------------------------------------------------------------------
-// EVENT LISTENERS
-//----------------------------------------------------------------------
-usePalette.addEventListener("click", ()=>{
-  paletteManager.usePalette = !paletteManager.usePalette
-  usePalette.classList.toggle('highlighted')
-  pixelateImage(parseInt(blockSizeValue.textContent));
-})
 
-addPaletteButton.addEventListener("click", ()=>{
-  let colors = []
-  Array.from(colorHolder.children).forEach((child) =>{
-    colors.push(hexToRgb(child.value))
-  })
-  let name = 'new';
-  colorHolder.innerHTML = ''
-  addPallette(name, colors)
-})
+const htmlElements = {
+  fileUploadInput:{
+    id: 'upload',
+    event:'change',
+    onEvent(newImg){
+      const file = newImg.target.files[0];
+      if (file) {
+        loadImgFile(file)
+      }
+    },
+  },
+  blockSizeInputField:{
+    id: 'blockSize',
+    event: 'change',
+    onEvent(slider){
+      htmlElements.blockSizeDisplay.textContent = slider.target.value;
+      pixelateImage(parseInt(htmlElements.blockSizeDisplay.textContent));
+    },
+  },
+  blockSizeDisplay:{
+    id: 'blockSizeValue',
+    event: 'click',
+    onEvent(){
+
+    },
+  },
+  blockCalculationMethodDropdown :{
+    id: 'blockCalc',
+    event: 'input',
+    onEvent(){
+      makeBlock = blockManager.makerMethods[blockCalculationMethodDropdown.value];
+      pixelateImage(parseInt(blockSizeDisplay.textContent));
+    },
+  },
+  colorHolder :{
+    id: 'colorHolder'
+  },
+  addColor :{
+    id: 'addColorButton',
+    event: 'input',
+    onEvent(){
+      htmlElements.colorHolder.appendChild(makeColorPicker())
+    },
+  },
+  removeColor :{
+    id: 'removeColorButton',
+    event: 'click',
+    onEvent(){
+      htmlElements.colorHolder.lastChild && htmlElements.colorHolder.removeChild(colorHolder.lastChild)
+    },
+  },
+  addPaletteButton :{
+    id: 'addPaletteButton',
+    event: 'click',
+    onEvent(){
+      let colors = []
+      Array.from(htmlElements.colorHolder.children).forEach((child) =>{
+        colors.push(hexToRgb(child.value))
+      })
+      let name = 'new';
+      htmlElements.colorHolder.innerHTML = ''
+      addPallette(name, colors)
+    },
+  },
+  usePalette: {
+    id: 'usePalette',
+    event: 'click',
+    onEvent(){
+      paletteManager.usePalette = !paletteManager.usePalette
+      htmlElements.usePalette.reference.classList.toggle('highlighted')
+      pixelateImage(parseInt(blockSizeDisplay.textContent));
+    },
+  },
+  palleteDropDown :{
+    id: 'removeColorButton',
+    event: 'click',
+    onEvent(eventDetails){
+      const selectedValue = eventDetails.target.value;
+      paletteManager.current = selectedValue;
+      pixelateImage(parseInt(blockSizeDisplay.textContent));
+    },
+  },
+}
+
+function configureEventListeners(){
+    // Using Object.keys
+  Object.values(htmlElements).forEach((value) => {
+    value.reference = document.getElementById(value.id)
+    console.log(value.reference)
+    value.reference.addEventListener(value.event,(event)=>{value.onEvent(event)})
+  });
+}
+
+
+
+configureEventListeners()
 
 function hexToRgb(hex) {
   // Remove the "#" at the beginning of the hex string if it's there
@@ -62,13 +141,6 @@ function hexToRgb(hex) {
   return [r, g, b];
 }
 
-removeColor.addEventListener("click", ()=>{
-  colorHolder.lastChild && colorHolder.removeChild(colorHolder.lastChild)
-})
-
-addColor.addEventListener("click", ()=>{
-  colorHolder.appendChild(makeColorPicker())
-})
 function makeColorPicker(){
   const colorPicker = document.createElement('input');
   colorPicker.type = 'color';
@@ -82,36 +154,7 @@ function getRandomColor() {
   return `#${randomColor.padStart(6, '0')}`;  // Ensures the hex code is always 6 digits (e.g., #ff0033)
 }
 
-palleteDropDown.addEventListener("change", function(event){
-  const selectedValue = event.target.value;
-  paletteManager.current = selectedValue;
-  pixelateImage(parseInt(blockSizeValue.textContent));
-})
 
-uploadInput.addEventListener('change', (newImg) => {
-  const file = newImg.target.files[0];
-  if (file) {
-    loadImgFile(file)
-  }
-});
-
-// Update slider value display
-blockSizeInput.addEventListener('input', (slider) => {
-  blockSizeValue.textContent = slider.target.value;
-});
-
-// Apply pixelation only when slider interaction ends
-blockSizeInput.addEventListener('change', (slider) => {
-  if (img.src) {
-    pixelateImage(parseInt(slider.target.value));
-  }
-});
-
-// Handle calc method change
-blockCalcDropDown.addEventListener('input', () => {
-  makeBlock = blockManager.blockMakerFunctions[blockCalcDropDown.value];
-  pixelateImage(parseInt(blockSizeValue.textContent));
-});
 
 //------------------------------------------------------------------
 // MAIN FUNCTIONS
