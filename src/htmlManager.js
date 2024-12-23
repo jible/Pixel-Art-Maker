@@ -59,7 +59,7 @@ const htmlElements = {
       Array.from(htmlElements.colorHolder.reference.children).forEach((child) =>{
         colors.push(hexToRgb(child.value))
       })
-      let name = 'new';
+      let name = htmlElements.paletteNamer.reference.value;
       htmlElements.colorHolder.reference.innerHTML = ''
       addPallette(name, colors)
     },
@@ -82,6 +82,9 @@ const htmlElements = {
       canvasManager.pixelateImage();
     },
   },
+  paletteNamer:{
+    id: 'paletteName'
+  }
 }
 
 export function configureHTMLElements(){

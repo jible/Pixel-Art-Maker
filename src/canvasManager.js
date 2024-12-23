@@ -61,3 +61,4 @@ export const canvasManager = {
     }
 }
 
+// set the default image

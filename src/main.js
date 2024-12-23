@@ -8,5 +8,6 @@ import { configureHTMLElements } from "./htmlManager.js";
 
 
 // ON START
+
 configureHTMLElements()
 updatePalletteDropDown();
