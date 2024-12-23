@@ -74,7 +74,7 @@ function imagePathToFile(imagePath, fileName) {
 
 // Use async/await to ensure the image is loaded and passed as a File
 async function setDefaultImage() {
-    const defaultImg = await imagePathToFile('/default.jpg', 'default.jpg');
+    const defaultImg = await imagePathToFile('./default.jpg', 'default.jpg');
     canvasManager.loadImgFile(defaultImg);  // Now you can call loadImgFile with the file
     canvasManager.pixelateImage()
 }

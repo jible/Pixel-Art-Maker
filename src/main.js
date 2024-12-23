@@ -1,7 +1,7 @@
 // ------------------------------
 // IMPORT 
 // -------------------------------
-import { paletteManager, addPallette, updatePalletteDropDown } from "./pallette.js";
+import {  updatePalletteDropDown } from "./pallette.js";
 import { configureHTMLElements } from "./htmlManager.js";
 
 
