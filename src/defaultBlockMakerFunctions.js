@@ -94,7 +94,7 @@ function getClosestColor(color) {
 
 function setBlockColor(r, g, b, canvas, data, x, y, blockSize) {
     let color = [r, g, b];
-    if (paletteManager.usePalette) {
+    if (paletteManager.current !=0) {
         color = getClosestColor(color);
     }
 

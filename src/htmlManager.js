@@ -64,15 +64,6 @@ const htmlElements = {
       addPallette(name, colors)
     },
   },
-  usePalette: {
-    id: 'usePalette',
-    event: 'click',
-    onEvent(){
-      paletteManager.usePalette = !paletteManager.usePalette
-      htmlElements.usePalette.reference.classList.toggle('highlighted')
-      canvasManager.pixelateImage();
-    },
-  },
   palleteDropDown :{
     id: 'paletteSelect',
     event: 'change',

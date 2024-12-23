@@ -5,6 +5,10 @@ const paleteDropDown = document.getElementById("paletteSelect");
 
 export const defaultPallettes = [
     {
+        name: "None",
+        colors: []
+    },
+    {
         name: "Retro",
         colors: [
             [255, 99, 71],    // Tomato Red

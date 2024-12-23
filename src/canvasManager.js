@@ -9,7 +9,7 @@ export const canvasManager = {
     originalWidth: 0,
     originalHeight: 0,
 
-    loadImgFile(file) {
+    loadImgFile(file, callback) {
         const reader = new FileReader();
         const manager = this;
         reader.onload = function (event) {
@@ -17,23 +17,29 @@ export const canvasManager = {
                 // Store original image dimensions
                 manager.originalWidth = manager.img.width;
                 manager.originalHeight = manager.img.height;
-
+    
                 // Set the canvas size to fit the image's size (but adjust for UI)
                 manager.canvas.width = manager.originalWidth;
                 manager.canvas.height = manager.originalHeight;
-
+    
                 // Adjust the canvas display size (scale it to fit within the page)
                 manager.canvas.style.maxWidth = '100%';
                 manager.canvas.style.maxHeight = '80vh'; // Prevent overflow vertically
                 manager.canvas.style.marginTop = '20px';
-
+    
                 // Draw the original image at its full size
                 manager.ctx.drawImage(manager.img, 0, 0);
+    
+                // Call the callback if provided
+                if (callback) {
+                    callback();
+                }
             };
             manager.img.src = event.target.result;
         };
         reader.readAsDataURL(file);
-    },
+    }
+    ,
 
     // Function to pixelate the image
     pixelateImage() {
@@ -75,8 +81,11 @@ function imagePathToFile(imagePath, fileName) {
 // Use async/await to ensure the image is loaded and passed as a File
 async function setDefaultImage() {
     const defaultImg = await imagePathToFile('./default.jpg', 'default.jpg');
-    canvasManager.loadImgFile(defaultImg);  // Now you can call loadImgFile with the file
-    canvasManager.pixelateImage()
+    canvasManager.loadImgFile(defaultImg, () => {
+        canvasManager.pixelateImage(); // Ensures this runs after the image is loaded
+    });
 }
+
+
 
 setDefaultImage();  // Call the function to set the default image
