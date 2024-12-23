@@ -9,7 +9,7 @@ export const canvasManager = {
     originalWidth: 0,
     originalHeight: 0,
 
-    loadImgFile(file, callback) {
+    loadImgFile(file) {
         const reader = new FileReader();
         const manager = this;
         reader.onload = function (event) {
@@ -31,9 +31,7 @@ export const canvasManager = {
                 manager.ctx.drawImage(manager.img, 0, 0);
     
                 // Call the callback if provided
-                if (callback) {
-                    callback();
-                }
+                canvasManager.pixelateImage()
             };
             manager.img.src = event.target.result;
         };
