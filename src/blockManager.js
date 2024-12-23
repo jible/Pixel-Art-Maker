@@ -2,7 +2,7 @@ import { blockMakerFunctions } from "./defaultBlockMakerFunctions.js"
 
 // IMPORTS
 export const blockManager = {
-    blockSize : 1,
+    blockSize : 25,
     makerMethods: blockMakerFunctions,
     currentMethod:  blockMakerFunctions.mean
 

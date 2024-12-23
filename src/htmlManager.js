@@ -85,6 +85,13 @@ export function configureHTMLElements(){
     if (!value.event) return
     value.reference.addEventListener(value.event,(event)=>{value.onEvent(event)})
   });
+
+  htmlElements.colorHolder.reference.appendChild(makeColorPicker())
+  htmlElements.blockSizeInputField.reference.value = blockManager.blockSize
+  htmlElements.blockSizeDisplay.reference.textContent = blockManager.blockSize
+
+  
+
 }
 
 
@@ -116,3 +123,4 @@ function hexToRgb(hex) {
     const randomColor = Math.floor(Math.random() * 16777215).toString(16); // 16777215 is #FFFFFF in decimal
     return `#${randomColor.padStart(6, '0')}`;  // Ensures the hex code is always 6 digits (e.g., #ff0033)
   }
+
