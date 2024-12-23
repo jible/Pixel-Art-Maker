@@ -8,27 +8,11 @@ import { blockManager } from "./blockManager.js";
 // CONSTANT DECLARATIONS
 //----------------------------------------------------------------------
 // Get HTML elements
-const fileUploadInput = document.getElementById('upload');
-const blockSizeInputField = document.getElementById('blockSize');
-const blockSizeDisplay = document.getElementById('blockSizeValue');
-const blockCalculationMethodDropdown = document.getElementById('blockCalc');
-const colorHolder = document.getElementById('colorHolder')
-const addColor = document.getElementById('addColorButton')
-const removeColor = document.getElementById('removeColorButton')
 const canvas = document.getElementById('canvas');
-const addPaletteButton = document.getElementById('addPaletteButton')
 const ctx = canvas.getContext('2d');
-const usePalette =  document.getElementById('usePalette')
 let makeBlock = blockManager.makerMethods.mean;
 let img = new Image();
 let originalWidth, originalHeight;
-const palleteDropDown = document.getElementById("paletteSelect");
-
-const drawingManager = {
-  blockSize: blockSizeInputField.value,
-  drawing: false,
-  current: false
-}
 
 
 const htmlElements = {
@@ -46,23 +30,20 @@ const htmlElements = {
     id: 'blockSize',
     event: 'change',
     onEvent(slider){
-      htmlElements.blockSizeDisplay.textContent = slider.target.value;
-      pixelateImage(parseInt(htmlElements.blockSizeDisplay.textContent));
+      htmlElements.blockSizeDisplay.reference.textContent = slider.target.value;
+      blockManager.blockSize = parseInt(slider.target.value)
+      pixelateImage();
     },
   },
   blockSizeDisplay:{
-    id: 'blockSizeValue',
-    event: 'click',
-    onEvent(){
-
-    },
+    id: 'blockSizeValue'
   },
   blockCalculationMethodDropdown :{
     id: 'blockCalc',
     event: 'input',
     onEvent(){
-      makeBlock = blockManager.makerMethods[blockCalculationMethodDropdown.value];
-      pixelateImage(parseInt(blockSizeDisplay.textContent));
+      makeBlock = blockManager.makerMethods[this.reference.value];
+      pixelateImage();
     },
   },
   colorHolder :{
@@ -70,16 +51,16 @@ const htmlElements = {
   },
   addColor :{
     id: 'addColorButton',
-    event: 'input',
+    event: 'click',
     onEvent(){
-      htmlElements.colorHolder.appendChild(makeColorPicker())
+      htmlElements.colorHolder.reference.appendChild(makeColorPicker())
     },
   },
   removeColor :{
     id: 'removeColorButton',
     event: 'click',
     onEvent(){
-      htmlElements.colorHolder.lastChild && htmlElements.colorHolder.removeChild(colorHolder.lastChild)
+      htmlElements.colorHolder.reference.lastChild && htmlElements.colorHolder.reference.removeChild(htmlElements.colorHolder.reference.lastChild)
     },
   },
   addPaletteButton :{
@@ -87,11 +68,11 @@ const htmlElements = {
     event: 'click',
     onEvent(){
       let colors = []
-      Array.from(htmlElements.colorHolder.children).forEach((child) =>{
+      Array.from(htmlElements.colorHolder.reference.children).forEach((child) =>{
         colors.push(hexToRgb(child.value))
       })
       let name = 'new';
-      htmlElements.colorHolder.innerHTML = ''
+      htmlElements.colorHolder.reference.innerHTML = ''
       addPallette(name, colors)
     },
   },
@@ -101,16 +82,16 @@ const htmlElements = {
     onEvent(){
       paletteManager.usePalette = !paletteManager.usePalette
       htmlElements.usePalette.reference.classList.toggle('highlighted')
-      pixelateImage(parseInt(blockSizeDisplay.textContent));
+      pixelateImage();
     },
   },
   palleteDropDown :{
-    id: 'removeColorButton',
-    event: 'click',
+    id: 'paletteSelect',
+    event: 'change',
     onEvent(eventDetails){
       const selectedValue = eventDetails.target.value;
       paletteManager.current = selectedValue;
-      pixelateImage(parseInt(blockSizeDisplay.textContent));
+      pixelateImage();
     },
   },
 }
@@ -119,7 +100,7 @@ function configureEventListeners(){
     // Using Object.keys
   Object.values(htmlElements).forEach((value) => {
     value.reference = document.getElementById(value.id)
-    console.log(value.reference)
+    if (!value.event) return
     value.reference.addEventListener(value.event,(event)=>{value.onEvent(event)})
   });
 }
@@ -187,7 +168,8 @@ function loadImgFile(file) {
 }
 
 // Function to pixelate the image
-function pixelateImage(blockSize) {
+function pixelateImage() {
+  const blockSize = blockManager.blockSize;
   // Clear the canvas before drawing the new pixelated version
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
