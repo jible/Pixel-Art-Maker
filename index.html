@@ -12,51 +12,56 @@
 <body>
   <div class="container">
     <!-- Sidebar for controls -->
-    <div class="sidebar">
-      <h1>Pixelation Tool</h1>
-    
-      <h2>Upload Image</h2>
-      <div class="input-group">
-        <input type="file" id="upload" accept="image/*">
-      </div>
-    
-      <h2>Block Settings</h2>
-      <div class="input-group">
-        <label class="control-label" for="blockSize">Block Size</label>
-        <input type="range" id="blockSize" min="1" max="50" value="10">
-        <span id="blockSizeValue">10</span>
+    <div class="sidebar left">
+        <h1>Pixelation Tool</h1>
 
-        <label class="control-label" for="blockCalc">Calculation Method</label>
-        <select id="blockCalc">
-          <option value="mean">Mean</option>
-          <option value="median">Median</option>
-          <option value="mode">Mode</option>
-        </select>
-      </div>
+        <h2>Upload Image</h2>
+        <div class="input-group">
+            <input type="file" id="upload" accept="image/*">
+        </div>
 
-      <!-- Palette Settings -->
-      <h2>Palette Settings</h2>
-      <div class="input-group">
-        <label for="paletteSelect">Select Palette</label>
-        <select id="paletteSelect">
-        </select>
+        <h2>Block Settings</h2>
+        <div class="input-group">
+            <label class="control-label" for="blockSize">Block Size</label>
+            <input type="range" id="blockSize" min="1" max="50" value="25">
+            <span id="blockSizeValue">25</span>
 
-        <label >Make a Palette</label>
+            <label class="control-label" for="blockCalc">Block Color Calculation</label>
+            <select id="blockCalc">
+                <option value="mean">Mean</option>
+                <option value="median">Median</option>
+                <option value="mode">Mode</option>
+            </select>
+        </div>
+
+        <h2>Palette Settings</h2>
+        <div class="input-group">
+            <label for="paletteSelect">Select Palette</label>
+            <select id="paletteSelect"></select>
+        </div>
+    </div>
+
+    <!-- Main content area -->
+    <div class="main-content">
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <!-- Sidebar for palette maker -->
+    <div class="sidebar right">
+        <h2>Make a Palette</h2>
         <div id="paletteMaker">
-          <textarea id="paletteName" rows="1" cols="10">Palette Name</textarea>
-          <div id="colorHolder"></div>
-          <button id="addColorButton">+</button>
-          <button id="removeColorButton">-</button>
+            <div>
+              <textarea id="paletteName" rows="1" cols="15">Palette Name</textarea>
+              <button id="addColorButton">+</button>
+              <button id="removeColorButton">-</button>
+            </div>
+            <div id="colorHolder"></div>
+            
         </div>
         <button id="addPaletteButton">Add Palette</button>
-      </div>
     </div>
+</div>
 
-    <!-- Main area for canvas -->
-    <div class="main-content">
-      <canvas id="canvas"></canvas>
-    </div>
-  </div>
 
 
   <script type="module" src="src/main.js"></script>

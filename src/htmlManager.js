@@ -59,6 +59,7 @@ const htmlElements = {
       Array.from(htmlElements.colorHolder.reference.children).forEach((child) =>{
         colors.push(hexToRgb(child.value))
       })
+      if(colors.length == 0) return
       let name = htmlElements.paletteNamer.reference.value;
       htmlElements.colorHolder.reference.innerHTML = ''
       addPallette(name, colors)
@@ -86,7 +87,9 @@ export function configureHTMLElements(){
     value.reference.addEventListener(value.event,(event)=>{value.onEvent(event)})
   });
 
-  htmlElements.colorHolder.reference.appendChild(makeColorPicker())
+  for (let i = 0; i <6; i++){
+    htmlElements.colorHolder.reference.appendChild(makeColorPicker())
+  }
   htmlElements.blockSizeInputField.reference.value = blockManager.blockSize
   htmlElements.blockSizeDisplay.reference.textContent = blockManager.blockSize
 
@@ -114,6 +117,7 @@ function hexToRgb(hex) {
   function makeColorPicker(){
     const colorPicker = document.createElement('input');
     colorPicker.type = 'color';
+    colorPicker.classList.add('color-picker')
   
     colorPicker.value = getRandomColor();  // Set default color to random
     return(colorPicker)
