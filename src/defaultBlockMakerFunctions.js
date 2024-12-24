@@ -68,7 +68,7 @@ export const blockMakerFunctions = {
 
 // Function to find the closest color in the current palette
 function getClosestColor(color) {
-    const palette = paletteManager.collection[paletteManager.current].colors;
+    const palette = paletteManager.current.colors;
     let closestColor = palette[0];
     let minDistance = Infinity;
 
@@ -94,7 +94,7 @@ function getClosestColor(color) {
 
 function setBlockColor(r, g, b, canvas, data, x, y, blockSize) {
     let color = [r, g, b];
-    if (paletteManager.current !=0) {
+    if (paletteManager.current.name != 'None') {
         color = getClosestColor(color);
     }
 

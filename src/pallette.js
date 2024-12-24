@@ -9,16 +9,6 @@ export const defaultPallettes = [
         colors: []
     },
     {
-        name: "Retro",
-        colors: [
-            [255, 99, 71],    // Tomato Red
-            [255, 215, 0],    // Gold
-            [152, 251, 152],  // Pale Green
-            [138, 43, 226],   // Blue Violet
-            [0, 191, 255]     // Deep Sky Blue
-        ]
-    },
-    {
         name: "Neon",
         colors: [
             [57, 255, 20],    // Neon Green
@@ -98,16 +88,6 @@ export const defaultPallettes = [
         ]
     },
     {
-        name: "Candy Crush",
-        colors: [
-            [255, 105, 180], // Hot Pink
-            [255, 182, 193], // Light Pink
-            [135, 206, 235], // Sky Blue
-            [255, 250, 205], // Lemon Yellow
-            [144, 238, 144]  // Light Green
-        ]
-    },
-    {
         name: "Forest Dream",
         colors: [
             [34, 139, 34],   // Forest Green
@@ -117,8 +97,6 @@ export const defaultPallettes = [
             [152, 251, 152]  // Pale Green
         ]
     }
-    
-    // You can add more default palettes like "vintage", "summer", "fall", etc.
 ];
 
 //------------------------------------------------------------------
@@ -127,7 +105,7 @@ export const defaultPallettes = [
 
 export const paletteManager = {
     usePalette: false,
-    current: 0,
+    current: defaultPallettes[0],
     collection: defaultPallettes
 };
 // event listeners
@@ -153,7 +131,7 @@ export function updatePalletteDropDown(){
 }
 
 
-export function addPallette(name,colors){
+export function addPalette(name,colors){
     
     paletteManager.collection.push({
         name: name,
@@ -165,5 +143,7 @@ export function addPallette(name,colors){
     optionElement.textContent = paletteManager.collection[paletteManager.collection.length-1].name;  // The text displayed for the option
     paleteDropDown.appendChild(optionElement)
 } 
+
+
 
 

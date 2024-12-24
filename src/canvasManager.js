@@ -1,10 +1,10 @@
-import { paletteManager, addPallette, updatePalletteDropDown } from "./pallette.js";
+import { paletteManager, addPalette, updatePalletteDropDown } from "./pallette.js";
 import { blockManager } from "./blockManager.js";
 
 const canvas = document.getElementById('canvas');
 export const canvasManager = {
     canvas: canvas,
-    ctx: canvas.getContext('2d'),
+    ctx: canvas.getContext('2d', { willReadFrequently: true }),
     img: new Image(),
     originalWidth: 0,
     originalHeight: 0,

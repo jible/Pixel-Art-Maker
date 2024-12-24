@@ -1,4 +1,4 @@
-import { paletteManager, addPallette, updatePalletteDropDown } from "./pallette.js";
+import { paletteManager, addPalette as addPalette, updatePalletteDropDown } from "./pallette.js";
 import { blockManager } from "./blockManager.js";
 import { canvasManager } from "./canvasManager.js";
 
@@ -49,6 +49,7 @@ const htmlElements = {
     event: 'click',
     onEvent(){
       htmlElements.colorHolder.reference.lastChild && htmlElements.colorHolder.reference.removeChild(htmlElements.colorHolder.reference.lastChild)
+
     },
   },
   addPaletteButton :{
@@ -62,7 +63,10 @@ const htmlElements = {
       if(colors.length == 0) return
       let name = htmlElements.paletteNamer.reference.value;
       htmlElements.colorHolder.reference.innerHTML = ''
-      addPallette(name, colors)
+      for (let i = 0; i <6; i++){
+        htmlElements.colorHolder.reference.appendChild(makeColorPicker())
+      }
+      addPalette(name, colors)
     },
   },
   palleteDropDown :{
@@ -70,14 +74,32 @@ const htmlElements = {
     event: 'change',
     onEvent(eventDetails){
       const selectedValue = eventDetails.target.value;
-      paletteManager.current = selectedValue;
+      paletteManager.current = paletteManager.collection[selectedValue];
       canvasManager.pixelateImage();
     },
   },
   paletteNamer:{
     id: 'paletteName'
   }
+
 }
+
+function setCustomPalette(){
+  paletteManager.current = paletteManager.uiPalette
+  canvasManager.pixelateImage()
+}
+
+
+function updateUIPalette(){
+  let colors = []
+  Array.from(htmlElements.colorHolder.reference.children).forEach((child) =>{
+    colors.push(hexToRgb(child.value))
+  })
+  if(colors.length == 0) return // fails if no colors
+  let name = htmlElements.paletteNamer.reference.value;
+  paletteManager.uiPalette = {name:name, colors:colors}
+}
+
 
 export function configureHTMLElements(){
     // Using Object.keys
@@ -90,10 +112,10 @@ export function configureHTMLElements(){
   for (let i = 0; i <6; i++){
     htmlElements.colorHolder.reference.appendChild(makeColorPicker())
   }
+  updateUIPalette()
   htmlElements.blockSizeInputField.reference.value = blockManager.blockSize
   htmlElements.blockSizeDisplay.reference.textContent = blockManager.blockSize
 
-  
 
 }
 
@@ -118,6 +140,7 @@ function hexToRgb(hex) {
     const colorPicker = document.createElement('input');
     colorPicker.type = 'color';
     colorPicker.classList.add('color-picker')
+
   
     colorPicker.value = getRandomColor();  // Set default color to random
     return(colorPicker)
