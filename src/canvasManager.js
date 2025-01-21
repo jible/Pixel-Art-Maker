@@ -1,4 +1,3 @@
-import { paletteManager, addPalette, updatePalletteDropDown } from "./pallette.js";
 import { blockManager } from "./blockManager.js";
 
 const canvas = document.getElementById('canvas');

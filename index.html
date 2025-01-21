@@ -15,19 +15,23 @@
     <div class="sidebar left" id = "sidebar left">
         <h1>Pixelation Tool</h1>
 
-        <h2>Upload Image</h2>
+        <h2>Upload/Export Image</h2>
         <div class="input-group">
             <input type="file" id="upload" accept="image/*">
+        </div>
+        <div class="input-group">
+            <button id="export">Export</button>
         </div>
 
         <h2>Block Settings</h2>
         <div class="input-group">
             <label class="control-label" for="blockSize">Block Size</label>
             <input type="range" id="blockSize" min="1" max="50" value="25">
-            <span id="blockSizeValue">25</span>
 
             <label class="control-label" for="blockCalc">Block Color Calculation</label>
             <select id="blockCalc">
+                <option value="lazy">Lazy</option>
+                <option value="random">Random</option>
                 <option value="mean">Mean</option>
                 <option value="median">Median</option>
                 <option value="mode">Mode</option>

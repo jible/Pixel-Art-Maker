@@ -4,6 +4,6 @@ import { blockMakerFunctions } from "./defaultBlockMakerFunctions.js"
 export const blockManager = {
     blockSize : 25,
     makerMethods: blockMakerFunctions,
-    currentMethod:  blockMakerFunctions.mean
+    currentMethod:  blockMakerFunctions.lazy
 
 }

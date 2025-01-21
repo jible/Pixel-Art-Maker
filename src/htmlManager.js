@@ -14,17 +14,24 @@ const htmlElements = {
       }
     },
   },
+  exportImage:{
+    id:"export",
+    event: "click",
+    onEvent(){
+      const dataURL = canvasManager.canvas.toDataURL('image/png')
+      const link = document.createElement('a');
+      link.href = dataURL
+      link.download = "pixelated.png"
+      link.click()
+    }
+  },
   blockSizeInputField:{
     id: 'blockSize',
     event: 'change',
     onEvent(slider){
-      htmlElements.blockSizeDisplay.reference.textContent = slider.target.value;
       blockManager.blockSize = parseInt(slider.target.value)
       canvasManager.pixelateImage();
     },
-  },
-  blockSizeDisplay:{
-    id: 'blockSizeValue'
   },
   blockCalculationMethodDropdown :{
     id: 'blockCalc',
@@ -114,9 +121,6 @@ export function configureHTMLElements(){
   }
   updateUIPalette()
   htmlElements.blockSizeInputField.reference.value = blockManager.blockSize
-  htmlElements.blockSizeDisplay.reference.textContent = blockManager.blockSize
-
-
 }
 
 

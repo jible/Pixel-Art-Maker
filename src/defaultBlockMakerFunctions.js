@@ -1,9 +1,24 @@
+import { blockManager } from "./blockManager.js";
 import { paletteManager } from "./pallette.js";
 
 export const blockMakerFunctions = {
-    mean(canvas, data, x, y, blockSize) {
+    lazy(canvas, data, x,y){
+        const px = ((y) * canvas.width + x) * 4;
+        let r = data[px]
+        let g = data[px + 1]
+        let b = data[px + 2]
+        setBlockColor(r,g,b,canvas,data,x,y)
+    },
+    random(canvas, data, x,y){
+        const px = ((y + Math.floor(Math.random() * blockManager.blockSize)) * canvas.width + x + Math.floor(Math.random() * blockManager.blockSize)) * 4;
+        let r = data[px]
+        let g = data[px + 1]
+        let b = data[px + 2]
+        setBlockColor(r,g,b,canvas,data,x,y)
+    },
+    mean(canvas, data, x, y) {
         let r = 0, g = 0, b = 0, count = 0;
-        itterateBlock(canvas, data, x, y, blockSize, (px) => {
+        itterateBlock(canvas, data, x, y, (px) => {
             count++;
             r += data[px * 4];        // Red
             g += data[px * 4 + 1];    // Green
@@ -15,15 +30,15 @@ export const blockMakerFunctions = {
         g = Math.floor(g / count);
         b = Math.floor(b / count);
   
-        setBlockColor(r, g, b, canvas, data, x, y, blockSize);
+        setBlockColor(r, g, b, canvas, data, x, y);
     },
-    mode(canvas, data, x, y, blockSize) {
+    mode(canvas, data, x, y) {
         // Use a single object to count RGB values efficiently
         const colorCounts = {};
         let mostCommon = { count: 0, r: 0, g: 0, b: 0 };
   
         // Iterate over the block to count colors
-        itterateBlock(canvas, data, x, y, blockSize, (px) => {
+        itterateBlock(canvas, data, x, y, (px) => {
             const r = data[px * 4];      // Red
             const g = data[px * 4 + 1];  // Green
             const b = data[px * 4 + 2];  // Blue
@@ -41,15 +56,15 @@ export const blockMakerFunctions = {
         });
   
         // Set the block color to the most common one
-        setBlockColor(mostCommon.r, mostCommon.g, mostCommon.b, canvas, data, x, y, blockSize);
+        setBlockColor(mostCommon.r, mostCommon.g, mostCommon.b, canvas, data, x, y);
     },
-    median(canvas, data, x, y, blockSize) {
+    median(canvas, data, x, y) {
         let rs = [];
         let gs = [];
         let bs = [];
   
         // Collect RGB values from the block
-        itterateBlock(canvas, data, x, y, blockSize, (px) => {
+        itterateBlock(canvas, data, x, y, (px) => {
             rs.push(data[px * 4]);      // Red
             gs.push(data[px * 4 + 1]);  // Green
             bs.push(data[px * 4 + 2]);  // Blue
@@ -61,7 +76,7 @@ export const blockMakerFunctions = {
         const b = quickMedian(bs);
   
         // Set the block color
-        setBlockColor(r, g, b, canvas, data, x, y, blockSize);
+        setBlockColor(r, g, b, canvas, data, x, y);
     }
 };
 
@@ -92,13 +107,13 @@ function getClosestColor(color) {
 
 
 
-function setBlockColor(r, g, b, canvas, data, x, y, blockSize) {
+function setBlockColor(r, g, b, canvas, data, x, y) {
     let color = [r, g, b];
     if (paletteManager.current.name != 'None') {
         color = getClosestColor(color);
     }
 
-    itterateBlock(canvas, data, x, y, blockSize, (px) => {
+    itterateBlock(canvas, data, x, y, (px) => {
         data[px * 4] = color[0];      // Set red
         data[px * 4 + 1] = color[1];  // Set green
         data[px * 4 + 2] = color[2];  // Set blue
@@ -106,8 +121,9 @@ function setBlockColor(r, g, b, canvas, data, x, y, blockSize) {
 }
 
 
-function itterateBlock(canvas, data, x, y, blockSize, callback){
+function itterateBlock(canvas, data, x, y, callback){
     // Loop through each pixel in the block
+    let blockSize = blockManager.blockSize
     for (let by = 0; by < blockSize; by++) {
         for (let bx = 0; bx < blockSize; bx++) {
             const px = (y + by) * canvas.width + (x + bx);
