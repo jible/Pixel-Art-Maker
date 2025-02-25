@@ -88,9 +88,11 @@ function getClosestColor(color) {
     let minDistance = Infinity;
 
     palette.forEach(paletteColor => {
-        const distance = Math.sqrt(Math.pow(paletteColor[0] - color[0], 2) + 
-                                   Math.pow(paletteColor[1] - color[1], 2) + 
-                                   Math.pow(paletteColor[2] - color[2], 2));
+        const distance = Math.sqrt(
+            Math.pow(paletteColor[0] - color[0], 2) + 
+            Math.pow(paletteColor[1] - color[1], 2) + 
+            Math.pow(paletteColor[2] - color[2], 2)
+        );
         
         if (distance < minDistance) {
             closestColor = paletteColor;

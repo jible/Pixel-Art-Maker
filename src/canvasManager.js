@@ -58,8 +58,51 @@ export const canvasManager = {
 
         // Put the modified image data back to the canvas
         this.ctx.putImageData(imageData, 0, 0);
+    },
+
+    makePaletteFromCanvas(numColors) {
+        // Cleaned this up here:
+        // https://chatgpt.com/share/67bd61ca-3730-8012-bc14-91c0cc62cd6d
+        const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+        const data = imageData.data;
+    
+        const maxValue = rgbToInt(255, 255, 255);
+        const rangeSize = Math.floor(maxValue / numColors);
+    
+        // Initialize groups as dictionaries to count colors
+        let groups = Array.from({ length: numColors }, () => ({}));
+    
+        for (let y = 0; y < this.canvas.height; y++) {
+            for (let x = 0; x < this.canvas.width; x++) {
+                const px = (y * this.canvas.width + x) * 4;
+                const r = data[px];
+                const g = data[px + 1];
+                const b = data[px + 2];
+                const value = rgbToInt(r, g, b);
+    
+                let index = Math.floor(value / rangeSize);
+                index = Math.min(index, numColors - 1); // Prevent out-of-bounds
+    
+                // Convert RGB to a string for counting
+                const colorKey = `${r},${g},${b}`;
+                groups[index][colorKey] = (groups[index][colorKey] || 0) + 1;
+            }
+        }
+    
+        // **Find the most common color in each group**
+        let palette = groups.map(group => {
+            if (Object.keys(group).length === 0) return [0, 0, 0]; // Handle empty groups
+    
+            const mostCommon = Object.entries(group).reduce((a, b) => (b[1] > a[1] ? b : a))[0]; // Most common color
+            return mostCommon.split(',').map(n => Number(n) || 0); // Ensure all values are numbers
+        });
+    
+        return palette;
     }
+    
 };
+
+
 
 // set the default image
 
@@ -84,5 +127,11 @@ async function setDefaultImage() {
 }
 
 
+
+// From ChatGPt
+function rgbToInt(r, g, b) { 
+    return (r << 16) | (g << 8) | b; 
+    }
+    
 
 setDefaultImage();  // Call the function to set the default image

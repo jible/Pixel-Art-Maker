@@ -87,6 +87,13 @@ const htmlElements = {
   },
   paletteNamer:{
     id: 'paletteName'
+  },
+  getPaletteFromCanvas:{
+    id: 'getCanvasPalette',
+    event: 'click',
+    onEvent(){
+      console.log( canvasManager.makePaletteFromCanvas(10) )
+    }
   }
 
 }
