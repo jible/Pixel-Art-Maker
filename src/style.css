@@ -79,6 +79,7 @@ body {
   align-items: center;
   padding: 20px;
   background: #dfe6e9;
+  position: relative; /* so the crop overlay can sit on top of the canvas */
 }
 
 /* Canvas Styling */
@@ -88,6 +89,17 @@ canvas {
   max-height: 100%;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   background-color: #fff;
+}
+
+/* Crop overlay sits exactly over the main canvas (positioned from JS) */
+#cropOverlay {
+  position: absolute;
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+  max-width: none;
+  max-height: none;
+  touch-action: none;
 }
 
 /* Palette Maker */

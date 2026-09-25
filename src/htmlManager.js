@@ -1,6 +1,7 @@
 import { paletteManager, addPalette as addPalette, updatePalletteDropDown } from "./pallette.js";
 import { blockManager } from "./blockManager.js";
 import { canvasManager } from "./canvasManager.js";
+import { cropManager } from "./cropManager.js";
 
 
 const htmlElements = {
@@ -18,7 +19,30 @@ const htmlElements = {
     id:"export",
     event: "click",
     onEvent(){
-      const dataURL = canvasManager.canvas.toDataURL('image/png')
+      // Shrink the cropped area so each block becomes a single pixel
+      const blockSize = blockManager.blockSize
+      const source = canvasManager.canvas
+      const sourceData = canvasManager.ctx.getImageData(0, 0, source.width, source.height).data
+      const { col0, row0, col1, row1 } = cropManager.getBlockRect()
+      const exportCanvas = document.createElement('canvas')
+      exportCanvas.width = col1 - col0
+      exportCanvas.height = row1 - row0
+      const exportCtx = exportCanvas.getContext('2d')
+      const exportImageData = exportCtx.createImageData(exportCanvas.width, exportCanvas.height)
+
+      for (let y = 0; y < exportCanvas.height; y++) {
+        for (let x = 0; x < exportCanvas.width; x++) {
+          // Every pixel in a block is the same colour, so sample its top-left pixel
+          const sourcePx = (((row0 + y) * blockSize) * source.width + (col0 + x) * blockSize) * 4
+          const exportPx = (y * exportCanvas.width + x) * 4
+          for (let i = 0; i < 4; i++) {
+            exportImageData.data[exportPx + i] = sourceData[sourcePx + i]
+          }
+        }
+      }
+      exportCtx.putImageData(exportImageData, 0, 0)
+
+      const dataURL = exportCanvas.toDataURL('image/png')
       const link = document.createElement('a');
       link.href = dataURL
       link.download = "pixelated.png"

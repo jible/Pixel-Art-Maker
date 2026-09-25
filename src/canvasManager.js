@@ -1,4 +1,5 @@
 import { blockManager } from "./blockManager.js";
+import { cropManager } from "./cropManager.js";
 
 const canvas = document.getElementById('canvas');
 export const canvasManager = {
@@ -29,7 +30,8 @@ export const canvasManager = {
                 // Draw the original image at its full size
                 manager.ctx.drawImage(manager.img, 0, 0);
     
-                // Call the callback if provided
+                // New image, so start with nothing cropped
+                cropManager.reset()
                 canvasManager.pixelateImage()
             };
             manager.img.src = event.target.result;
@@ -58,6 +60,9 @@ export const canvasManager = {
 
         // Put the modified image data back to the canvas
         this.ctx.putImageData(imageData, 0, 0);
+
+        // Redraw the crop overlay (also updates the export dimensions)
+        cropManager.draw();
     },
 
     makePaletteFromCanvas(numColors) {
